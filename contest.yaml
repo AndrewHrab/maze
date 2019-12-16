@@ -1,0 +1,38 @@
+executable: main.exe
+test-cases:
+    test-01:
+        stdin: |
+            1
+        stdout: |
+            How hard would you like the maze?
+            From a scale of 1-4?
+        ofstreams:
+            - base-file: test_files/1test.txt
+              test-file: 1.txt
+    test-02:
+        stdin: |
+            2
+        stdout: |
+            How hard would you like the maze?
+            From a scale of 1-4?
+        ofstreams:
+            - base-file: test_files/2test.txt
+              test-file: 2.txt
+    test-03:
+        stdin: |
+            3
+        stdout: |
+            How hard would you like the maze?
+            From a scale of 1-4?
+        ofstreams:
+            - base-file: test_files/3test.txt
+              test-file: 3.txt
+    test-04:
+        stdin: |
+            4
+        stdout: |
+            How hard would you like the maze?
+            From a scale of 1-4?
+        ofstreams:
+            - base-file: test_files/4test.txt
+              test-file: 4.txt

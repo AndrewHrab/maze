@@ -1,7 +1,26 @@
 #include <iostream>
 #include <random> 
 #include <iomanip>
+#include <iostream>
+#include <fstream>
+
 using namespace std;
+
+int writeFile(vector<vector<char> > maze, int rows, int columns, int level){
+    stringstream fname;
+    fname << level << ".txt";
+    ofstream myfile;
+    myfile.open (fname.str());
+        for (int i = 0; i < columns; i++) { 
+            for (int j = 0; j < rows; j++){ 
+                myfile << maze[i][j]<< " "; 
+            } 
+            myfile << "\n"; 
+        } 
+    myfile << "\n\n"; 
+    myfile.close();
+    return 0;
+}
 
 void printMaze(vector<vector<char> > maze, int rows, int columns){
     for (int i = 0; i < columns; i++) { 
@@ -17,7 +36,7 @@ void printMaze(vector<vector<char> > maze, int rows, int columns){
 
 bool mazeTest(vector<vector<char> > maze, int columns, int rows){
     enum direction{north, south, west, east}facing;
-    cout<<"test1"<<endl;
+    //cout<<"test1"<<endl;
     struct position{
 	    int x;
 	    int y;
@@ -37,7 +56,7 @@ bool mazeTest(vector<vector<char> > maze, int columns, int rows){
         traverser.x = 7;
         startx = 7;
     }
-    cout<<"test2"<<endl;
+    //cout<<"test2"<<endl;
 
     traverser.y = rows - 1;
     starty = rows - 1;
@@ -46,32 +65,32 @@ bool mazeTest(vector<vector<char> > maze, int columns, int rows){
 
     int count = 0;
 
-    cout<<traverser.y<<endl;
-    cout<<traverser.x<<endl;
+    //cout<<traverser.y<<endl;
+    //cout<<traverser.x<<endl;
 
 	//Finding INITIAL direction
 	if ((traverser.y - 1) == 0){
 		facing = south;
-		printf("TEST: Traverser is facing south\n");
+		//printf("TEST: Traverser is facing south\n");
 	}
 
 	else if ((traverser.x - 1) == 0){
 		facing = east;
-		printf("TEST: Traverser is facing east\n");
+		//printf("TEST: Traverser is facing east\n");
 	}
 
 	else if ((traverser.y + 1) == columns){
 		facing = north;
-		printf("TEST: Traverser is facing north\n");
+		//printf("TEST: Traverser is facing north\n");
 	}
 
 	else if ((traverser.x + 1) == rows){
 		facing = west;
-		printf("TEST: Traverser is facing west\n");
+		//printf("TEST: Traverser is facing west\n");
 	}
 
 	else {
-		printf("ERROR: Could not find initial direction.\n");
+		//printf("ERROR: Could not find initial direction.\n");
 	}
     
     while (count < 350){
@@ -266,8 +285,8 @@ bool mazeTest(vector<vector<char> > maze, int columns, int rows){
                     facing = south;
                 }
             }
-            
-            printMaze(maze, columns, rows);
+            //UNCOMMENT BELOW
+            //printMaze(maze, columns, rows);
             if (traverser.y == 0){return true;}
             else{
                 count++;
@@ -275,27 +294,30 @@ bool mazeTest(vector<vector<char> > maze, int columns, int rows){
             if (count == 350){
                 return false;
             }
-            cout<<"Got out"<<endl;
+            //cout<<"Got out"<<endl;
         }   
     }
-    cout<<"Got out not supposed to"<<endl;
+    //cout<<"Got out not supposed to"<<endl;
     return false;
 }
 
 void newMaze(int rows, int columns, int level){
     vector<vector<char> > maze( rows , vector<char> (columns, 0)); 
-	uniform_int_distribution<int> dis(0,2);
+	
     bool isMaze = false;
     int seed = 0, tester = 0;
     //cout << seed << endl;
 
-    if (level == 1){
-        tester = 2; 
+    /*if (level == 1){
+        uniform_int_distribution<int> dis(0,1);
     }
     else if (level == 2){
-        tester = 5;
+        uniform_int_distribution<int> dis(0,2);
     }
-    else { tester = 7;}
+    else { uniform_int_distribution<int> dis(0,3);}*/
+
+    uniform_int_distribution<int> dis(0,(level+1));
+    tester = 7;
 
     while (isMaze == false){
     
@@ -333,13 +355,15 @@ void newMaze(int rows, int columns, int level){
                 }
             } 
         } 
-        printMaze(maze, columns, rows);
+        //UNCOMMENT BELOW
+        //printMaze(maze, columns, rows);
         if (mazeTest(maze, columns, rows)){
             isMaze = true;
-            cout << "Maze is good" << endl;
+            writeFile(maze, columns, rows, level);
+            //cout << "Maze is good" << endl;
         }
         else{
-            cout << "Maze is not good" << endl;
+            //cout << "Maze is not good" << endl;
             seed++;
         }
     }
@@ -354,9 +378,9 @@ int main()
     int level = 0;
 
     cout << "How hard would you like the maze?" << endl;
-    cout << "From a scale of 1-3?" << endl;
+    cout << "From a scale of 1-4?" << endl;
     cin >> level;
-
+    /*
     if(level == 1){
         rows = 5;
         columns = 5;
@@ -368,9 +392,9 @@ int main()
     else if(level == 3){
         rows = 15;
         columns = 15;
-    }
+    }*/
+    rows = 15;
+    columns = 15;
 
     newMaze(columns, rows, level);
-
-    cout << "Got here 1" << endl;
 }
