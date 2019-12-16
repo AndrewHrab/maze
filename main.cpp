@@ -16,263 +16,287 @@ void printMaze(vector<vector<char> > maze, int rows, int columns){
 }
 
 bool mazeTest(vector<vector<char> > maze, int columns, int rows){
-    enum direction{north, south, east, west}facing;
+    enum direction{north, south, west, east}facing;
     cout<<"test1"<<endl;
     struct position{
 	    int x;
 	    int y;
     }traverser;
 
+    int startx, starty;
+
     if (columns == 5){
-        traverser.x = 3; 
+        traverser.x = 2;
+        startx = 2;
     }
     else if (columns == 11){
-        traverser.x = 6;
+        traverser.x = 5;
+        startx = 5;
     }
-    else { traverser.x = 8;}
+    else {
+        traverser.x = 7;
+        startx = 7;
+    }
     cout<<"test2"<<endl;
 
     traverser.y = rows - 1;
+    starty = rows - 1;
+
 	maze[traverser.y][traverser.x] = 'X';
 
     int count = 0;
 
-    cout<<"test3"<<endl;
+    cout<<traverser.y<<endl;
+    cout<<traverser.x<<endl;
 
 	//Finding INITIAL direction
-	if ((traverser.y) == 0){
-		facing = north;
-		printf("TEST: Traverser is facing north\n");
-	}
-
-	else if ((traverser.x - 1) == 0){
-		facing = west;
-		printf("TEST: Traverser is facing west\n");
-	}
-
-	else if ((traverser.y + 1) == columns){
+	if ((traverser.y - 1) == 0){
 		facing = south;
 		printf("TEST: Traverser is facing south\n");
 	}
 
-	else if ((traverser.x + 1) == rows){
+	else if ((traverser.x - 1) == 0){
 		facing = east;
 		printf("TEST: Traverser is facing east\n");
+	}
+
+	else if ((traverser.y + 1) == columns){
+		facing = north;
+		printf("TEST: Traverser is facing north\n");
+	}
+
+	else if ((traverser.x + 1) == rows){
+		facing = west;
+		printf("TEST: Traverser is facing west\n");
 	}
 
 	else {
 		printf("ERROR: Could not find initial direction.\n");
 	}
-
+    
     while (count < 350){
-        while (traverser.x >= 0 || traverser.x <= columns || traverser.y >= 0 || traverser.y <= rows){
-            if (facing == north){
-                if (maze[traverser.x][traverser.y + 1] == ' '){
+        while (traverser.x >= 0 || traverser.x <= columns || traverser.y >= 0 || traverser.y <= (rows - 1)){
+            if ((traverser.x == startx) && (traverser.y == starty) && (count > 1)){
+                return false;
+            }
+            if (facing == south){
+                if (maze[traverser.y + 1][traverser.x] == ' '){
                     traverser.y++;
-                    maze[traverser.y][traverser.x] = 'X';
-                    facing = east;
-                }
-                else if (maze[traverser.x - 1][traverser.y] == ' '){
-                    traverser.x--;
-                    maze[traverser.y][traverser.x] = 'X';
-                    facing = north;
-                }
-                else if (maze[traverser.x][traverser.y - 1] == ' '){
-                    traverser.y--;
                     maze[traverser.y][traverser.x] = 'X';
                     facing = west;
                 }
-                else if (maze[traverser.x + 1][traverser.y] == ' '){
+                else if (maze[traverser.y][traverser.x - 1] == ' '){
+                    traverser.x--;
+                    maze[traverser.y][traverser.x] = 'X';
+                    facing = south;
+                }
+                else if (maze[traverser.y - 1][traverser.x] == ' '){
+                    traverser.y--;
+                    maze[traverser.y][traverser.x] = 'X';
+                    facing = east;
+                }
+                else if (maze[traverser.y][traverser.x + 1] == ' '){
                     traverser.x++;
                     //maze[traverser.y][traverser.x] = 'X';
-                    facing = south;
+                    facing = north;
                 }
-                else if (maze[traverser.x][traverser.y + 1] == 'X'){
+                else if (maze[traverser.y + 1][traverser.x] == 'X'){
                     maze[traverser.y][traverser.x] = 'O';
                     traverser.y++;
                     
-                    facing = east;
+                    facing = west;
                 }
-                else if (maze[traverser.x - 1][traverser.y] == 'X'){
+                else if (maze[traverser.y][traverser.x - 1] == 'X'){
                     maze[traverser.y][traverser.x] = 'O';
                     traverser.x--;
                     
-                    facing = north;
+                    facing = south;
                 }
-                else if (maze[traverser.x][traverser.y - 1] == 'X'){
+                else if (maze[traverser.y - 1][traverser.x] == 'X'){
                     maze[traverser.y][traverser.x] = 'O';
                     traverser.y--;
-                    
-                    facing = west;
-                }
-                else if (maze[traverser.x + 1][traverser.y] == 'X'){
-                    maze[traverser.y][traverser.x] = 'O';
-                    traverser.x++;
-                    
-                    facing = south;
-                }
-            }
-
-            else if (facing == east){
-                if (maze[traverser.x + 1][traverser.y] == ' '){ // || maze[traverser.x + 1][traverser.y] != columns
-                    traverser.x++;
-                    maze[traverser.y][traverser.x] = 'X';
-                    facing = south;
-                }
-                else if (maze[traverser.x][traverser.y + 1] == ' '){
-                    traverser.y++;
-                    maze[traverser.y][traverser.x] = 'X';
-                    facing = east;
-                }
-                else if (maze[traverser.x - 1][traverser.y] == ' '){
-                    traverser.x--;
-                    maze[traverser.y][traverser.x] = 'X';
-                    facing = north;
-                }
-                else if (maze[traverser.x][traverser.y - 1] == ' '){
-                    traverser.y--;
-                    //maze[traverser.y][traverser.x] = 'X';	
-                    facing = west;
-                }
-                else if (maze[traverser.x + 1][traverser.y] == 'X'){
-                    maze[traverser.y][traverser.x] = 'O';
-                    traverser.x++;
-                    
-                    facing = south;
-                }
-                else if (maze[traverser.x][traverser.y + 1] == 'X'){
-                    maze[traverser.y][traverser.x] = 'O';
-                    traverser.y++;
                     
                     facing = east;
                 }
-                else if (maze[traverser.x - 1][traverser.y] == 'X'){
+                else if (maze[traverser.y][traverser.x + 1] == 'X'){
                     maze[traverser.y][traverser.x] = 'O';
-                    traverser.x--;
+                    traverser.x++;
                     
                     facing = north;
-                }
-                else if (maze[traverser.x][traverser.y - 1] == 'X'){
-                    maze[traverser.y][traverser.x] = 'O';
-                    traverser.y--;
-                    
-                    facing = west;
                 }
             }
 
             else if (facing == west){
-                if (maze[traverser.x - 1][traverser.y] == ' '){
-                    traverser.x--;
+                if (maze[traverser.y][traverser.x + 1] == ' '){ // || maze[traverser.x + 1][traverser.y] != columns
+                    traverser.x++;
                     maze[traverser.y][traverser.x] = 'X';
                     facing = north;
                 }
-                else if (maze[traverser.x][traverser.y  - 1] == ' '){
-                    traverser.y--;
+                else if (maze[traverser.y + 1][traverser.x] == ' '){
+                    traverser.y++;
                     maze[traverser.y][traverser.x] = 'X';
                     facing = west;
                 }
-                else if (maze[traverser.x + 1][traverser.y] == ' '){
-                    traverser.x++;
+                else if (maze[traverser.y][traverser.x - 1] == ' '){
+                    traverser.x--;
                     maze[traverser.y][traverser.x] = 'X';
                     facing = south;
                 }
-                else if (maze[traverser.x][traverser.y + 1] == ' '){
-                    traverser.y++;
-                    //maze[traverser.y][traverser.x] = 'X';
+                else if (maze[traverser.y - 1][traverser.x] == ' '){
+                    traverser.y--;
+                    //maze[traverser.y][traverser.x] = 'X';	
                     facing = east;
                 }
-                else if (maze[traverser.x - 1][traverser.y] == 'X'){
-                    maze[traverser.y][traverser.x] = 'O';
-                    traverser.x--;
-                    
-                    facing = north;
-                }
-                else if (maze[traverser.x][traverser.y - 1] == 'X'){
-                    maze[traverser.y][traverser.x] = 'O';
-                    traverser.y--;
-                    
-                    facing = west;
-                }
-                else if (maze[traverser.x + 1][traverser.y] == 'X'){
+                else if (maze[traverser.y][traverser.x + 1] == 'X'){
                     maze[traverser.y][traverser.x] = 'O';
                     traverser.x++;
                     
-                    facing = south;
+                    facing = north;
                 }
-                else if (maze[traverser.x][traverser.y + 1] == 'X'){
+                else if (maze[traverser.y + 1][traverser.x] == 'X'){
                     maze[traverser.y][traverser.x] = 'O';
                     traverser.y++;
+                    
+                    facing = west;
+                }
+                else if (maze[traverser.y][traverser.x - 1] == 'X'){
+                    maze[traverser.y][traverser.x] = 'O';
+                    traverser.x--;
+                    
+                    facing = south;
+                }
+                else if (maze[traverser.y - 1][traverser.x] == 'X'){
+                    maze[traverser.y][traverser.x] = 'O';
+                    traverser.y--;
                     
                     facing = east;
                 }
             }
 
-            else { //if facing == south
-                if (maze[traverser.x][traverser.y  - 1] == ' '){
-                    traverser.y--;
-                    maze[traverser.y][traverser.x] = 'X';
-                    facing = west;
-                }
-                else if (maze[traverser.x + 1][traverser.y] == ' '){
-                    traverser.x++;
+            else if (facing == east){
+                if (maze[traverser.y][traverser.x - 1] == ' '){
+                    traverser.x--;
                     maze[traverser.y][traverser.x] = 'X';
                     facing = south;
                 }
-                else if (maze[traverser.x][traverser.y + 1] == ' '){
-                    traverser.y++;
+                else if (maze[traverser.y  - 1][traverser.x] == ' '){
+                    traverser.y--;
                     maze[traverser.y][traverser.x] = 'X';
                     facing = east;
                 }
-                else if (maze[traverser.x - 1][traverser.y] == ' '){
-                    traverser.x--;
+                else if (maze[traverser.y][traverser.x + 1] == ' '){
+                    traverser.x++;
+                    maze[traverser.y][traverser.x] = 'X';
+                    facing = north;
+                }
+                else if (maze[traverser.y + 1][traverser.x] == ' '){
+                    traverser.y++;
                     //maze[traverser.y][traverser.x] = 'X';
-                    facing = north;
-                }
-                else if (maze[traverser.x][traverser.y - 1] == 'X'){
-                    maze[traverser.y][traverser.x] = 'O';
-                    traverser.y--;
-                    
                     facing = west;
                 }
-                else if (maze[traverser.x + 1][traverser.y] == 'X'){
-                    maze[traverser.y][traverser.x] = 'O';
-                    traverser.x++;
-                    
-                    facing = south;
-                }
-                else if (maze[traverser.x][traverser.y + 1] == 'X'){
-                    maze[traverser.y][traverser.x] = 'O';
-                    traverser.y++;
-                    facing = east;
-                    
-                }
-                else if (maze[traverser.x - 1][traverser.y] == 'X'){
+                else if (maze[traverser.y][traverser.x - 1] == 'X'){
                     maze[traverser.y][traverser.x] = 'O';
                     traverser.x--;
                     
+                    facing = south;
+                }
+                else if (maze[traverser.y - 1][traverser.x] == 'X'){
+                    maze[traverser.y][traverser.x] = 'O';
+                    traverser.y--;
+                    
+                    facing = east;
+                }
+                else if (maze[traverser.y][traverser.x + 1] == 'X'){
+                    maze[traverser.y][traverser.x] = 'O';
+                    traverser.x++;
+                    
                     facing = north;
+                }
+                else if (maze[traverser.y + 1][traverser.x] == 'X'){
+                    maze[traverser.y][traverser.x] = 'O';
+                    traverser.y++;
+                    
+                    facing = west;
                 }
             }
+
+            else { //if facing == south
+                if (maze[traverser.y  - 1][traverser.x] == ' '){
+                    traverser.y--;
+                    maze[traverser.y][traverser.x] = 'X';
+                    facing = east;
+                }
+                else if (maze[traverser.y][traverser.x + 1] == ' '){
+                    traverser.x++;
+                    maze[traverser.y][traverser.x] = 'X';
+                    facing = north;
+                }
+                else if (maze[traverser.y + 1][traverser.x] == ' '){
+                    traverser.y++;
+                    maze[traverser.y][traverser.x] = 'X';
+                    facing = west;
+                }
+                else if (maze[traverser.y][traverser.x - 1] == ' '){
+                    traverser.x--;
+                    //maze[traverser.y][traverser.x] = 'X';
+                    facing = south;
+                }
+                else if (maze[traverser.y - 1][traverser.x] == 'X'){
+                    maze[traverser.y][traverser.x] = 'O';
+                    traverser.y--;
+                    
+                    facing = east;
+                }
+                else if (maze[traverser.y][traverser.x + 1] == 'X'){
+                    maze[traverser.y][traverser.x] = 'O';
+                    traverser.x++;
+                    
+                    facing = north;
+                }
+                else if (maze[traverser.y + 1][traverser.x] == 'X'){
+                    maze[traverser.y][traverser.x] = 'O';
+                    traverser.y++;
+                    facing = west;
+                    
+                }
+                else if (maze[traverser.y][traverser.x - 1] == 'X'){
+                    maze[traverser.y][traverser.x] = 'O';
+                    traverser.x--;
+                    
+                    facing = south;
+                }
+            }
+            
             printMaze(maze, columns, rows);
-            if (traverser.y == -1){return true;}
+            if (traverser.y == 0){return true;}
             else{
                 count++;
             }
             if (count == 350){
                 return false;
             }
-            
+            cout<<"Got out"<<endl;
         }   
     }
+    cout<<"Got out not supposed to"<<endl;
     return false;
 }
 
-void newMaze(int rows, int columns){
+void newMaze(int rows, int columns, int level){
     vector<vector<char> > maze( rows , vector<char> (columns, 0)); 
 	uniform_int_distribution<int> dis(0,2);
     bool isMaze = false;
-    int seed = 0;
+    int seed = 0, tester = 0;
     //cout << seed << endl;
+
+    if (level == 1){
+        tester = 2; 
+    }
+    else if (level == 2){
+        tester = 5;
+    }
+    else { tester = 7;}
+
     while (isMaze == false){
     
         mt19937 engine{seed};
@@ -283,14 +307,30 @@ void newMaze(int rows, int columns){
                 
                 int num = dis(engine);
                 
-                if(num == 0 || num == 1){
+                if (j == (columns - 1)){
+                    maze[i][j] = '#';
+                }
+                else if (j == tester && (i == (rows - 2))){
                     maze[i][j] = ' ';
                 }
-
-                else{
+                else if (j == tester && (i == (rows - 1))){
+                    maze[i][j] = ' ';
+                }
+                else if (i == (rows - 1)){
                     maze[i][j] = '#';
-                } 
+                }
+                else if (j == 0){
+                    maze[i][j] = '#';
+                }
+                else{
+                    if(num == 0 || num == 1){
+                        maze[i][j] = ' ';
+                    }
 
+                    else{
+                        maze[i][j] = '#';
+                    } 
+                }
             } 
         } 
         printMaze(maze, columns, rows);
@@ -330,7 +370,7 @@ int main()
         columns = 15;
     }
 
-    newMaze(columns, rows);
+    newMaze(columns, rows, level);
 
     cout << "Got here 1" << endl;
 }
